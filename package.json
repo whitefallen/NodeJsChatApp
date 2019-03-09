@@ -1,0 +1,27 @@
+{
+  "name": "nodejschatapp",
+  "version": "1.0.0",
+  "description": "NodeJsChatApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whitefallen/NodeJsChatApp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whitefallen/NodeJsChatApp/issues"
+  },
+  "homepage": "https://github.com/whitefallen/NodeJsChatApp#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
