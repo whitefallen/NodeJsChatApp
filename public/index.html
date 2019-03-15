@@ -6,14 +6,18 @@
     </title>
 </head>
 <body>
-<header>
-    <h1>Chat App</h1>
-</header>
-<article>
-    <button id="increment">
-        +1
-    </button>
-</article>
+<main>
+    <header>
+        <h1>Chat App</h1>
+    </header>
+    <form id="messageForm">
+        <label for="messageInput">
+            Message:
+        </label>
+        <input id="messageInput" name="messageInput" type="text" placeholder="your message here"/>
+        <button type="submit">SEND ME</button>
+    </form>
+</main>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js"></script>
 </body>

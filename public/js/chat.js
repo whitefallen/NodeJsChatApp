@@ -1,18 +1,16 @@
 const clientSocket = io();
-let counterButton = document.querySelector('#increment');
 
-clientSocket.on('countInit', (counter) => {
-    console.log(`The Count has been received its currently: ${counter}`);
+
+clientSocket.on('message', (messageText) => {
+   console.log(messageText);
 });
 
-counterButton.addEventListener('click', () => {
-    console.log('Clicked');
-    clientSocket.emit('incrementCounter');
-});
+const messageForm = document.querySelector('#messageForm');
 
-clientSocket.on('countUpdated', (counter) => {
-    console.log(`The Count has been updated its currently: ${counter}`);
+messageForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const messageText = e.target.elements.messageInput;
+    clientSocket.emit('sendMessage', messageText);
 });
-
 
 
