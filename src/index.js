@@ -5,9 +5,9 @@ const express = require('express');
 const socketio = require('socket.io');
 
 const exprApp = express();
-// Create a Plain Server Instanz passing in ExpressApp to Use SocketIO later
+// Create a Plain Server passing in ExpressApp to Use SocketIO later
 const httpServer = http.createServer(exprApp);
-// Create SocketIo Instanz based of the Server
+// Create SocketIo
 const io = socketio(httpServer);
 
 const port = process.env.PORT || 3000;
