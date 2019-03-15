@@ -3,6 +3,7 @@ const http = require('http');
 const path = require('path');
 const express = require('express');
 const socketio = require('socket.io');
+const Filter = require('bad-words');
 
 const exprApp = express();
 // Create a Plain Server passing in ExpressApp to Use SocketIO later
@@ -20,10 +21,23 @@ exprApp.use(express.static(publicDirPath));
 // On Every Event:Connection log to Console
 io.on('connection', (socket) => {
     console.log('New Websocket Connection');
+
     socket.emit('message', `Welcome!`);
-    socket.on('sendMessage', (messageText) => {
-        io.emit('message',messageText);
-    })
+
+    socket.broadcast.emit('message', `A new User has Joined the Frey.`);
+
+    socket.on('sendMessage', (messageText, callback) => {
+        const filter = new Filter();
+        if(filter.isProfane(messageText)) {
+          return callback('Profanity is not allowed!');
+        }
+        io.emit('message', messageText);
+        callback('');
+    });
+
+    socket.on('disconnect', () => {
+        io.emit('message', `A User have left.`);
+    });
 });
 
 
