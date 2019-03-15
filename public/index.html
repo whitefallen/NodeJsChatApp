@@ -2,23 +2,29 @@
 <html lang="de">
 <head>
     <title>
-        Chat App
+        Discordify
     </title>
+    <link rel="icon" href="/img/favicon.png">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<main>
-    <header>
-        <h1>Chat App</h1>
-    </header>
-    <form id="messageForm">
-        <label for="messageInput">
-            Message:
-        </label>
-        <input id="messageInput" name="messageInput" type="text" placeholder="your message here"/>
-        <button type="submit" id="messageButton">SEND ME</button>
-    </form>
-</main>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/chat.js"></script>
+    <main>
+        <div class="centered-form">
+            <div class="centered-form__box">
+                <h1>Join</h1>
+                <form action="/chat.html">
+                    <label for="username">
+                        Display name:
+                    </label>
+                    <input type="text" name="username" placeholder="display name" required>
+                    <label for="room">
+                        Room name:
+                    </label>
+                    <input type="text" name="room" placeholder="room name" required>
+                    <button>Join</button>
+                </form>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
