@@ -23,16 +23,22 @@ exprApp.use(express.static(publicDirPath));
 io.on('connection', (socket) => {
     console.log('New Websocket Connection');
 
-    socket.emit('message', generateMessage(`Welcome`));
 
-    socket.broadcast.emit('message', generateMessage(`A new User has Joined the Frey.`));
+
+    socket.on('join', ({ username, room}) => {
+       socket.join(room);
+
+       socket.emit('message', generateMessage(`Welcome`));
+       socket.broadcast.to(room).emit('message', generateMessage(`A new User ${username} has Joined the Frey.`));
+
+    });
 
     socket.on('sendMessage', (messageText, callback) => {
         const filter = new Filter();
         if(filter.isProfane(messageText)) {
           return callback('Profanity is not allowed!');
         }
-        io.emit('message', generateMessage(messageText));
+        io.to('Five').emit('message', generateMessage(messageText));
         callback('');
     });
 

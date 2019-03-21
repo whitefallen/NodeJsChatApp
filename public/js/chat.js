@@ -9,6 +9,9 @@ const messages = document.querySelector('#messages');
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 
+// Options
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
+
 clientSocket.on('message', (message) => {
    console.log(message);
    const html = Mustache.render(messageTemplate, {
@@ -35,4 +38,4 @@ messageForm.addEventListener("submit", (e) => {
     });
 });
 
-
+clientSocket.emit('join', { username, room});
