@@ -16,7 +16,8 @@ clientSocket.on('message', (message) => {
    console.log(message);
    const html = Mustache.render(messageTemplate, {
        message: message.text,
-       createdAt: moment(message.createdAt).format('h:mm a')
+       createdAt: moment(message.createdAt).format('h:mm a'),
+       username: message.username
    });
    messages.insertAdjacentHTML('beforeend', html);
 });
@@ -25,7 +26,7 @@ messageForm.addEventListener("submit", (e) => {
     e.preventDefault();
     messageFormButton.setAttribute('disabled','disabled');
     const messageText = messageInput.value;
-    clientSocket.emit('sendMessage', messageText, (error) => {
+    clientSocket.emit('sendMessage', messageText, username, (error) => {
 
         messageFormButton.removeAttribute('disabled');
         messageInput.value = '';

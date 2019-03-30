@@ -33,12 +33,12 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('sendMessage', (messageText, callback) => {
+    socket.on('sendMessage', (messageText, username, callback) => {
         const filter = new Filter();
         if(filter.isProfane(messageText)) {
           return callback('Profanity is not allowed!');
         }
-        io.to('Five').emit('message', generateMessage(messageText));
+        io.to('Five').emit('message', generateMessage(messageText, username));
         callback('');
     });
 
