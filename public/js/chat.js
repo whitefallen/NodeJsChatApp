@@ -26,7 +26,7 @@ messageForm.addEventListener("submit", (e) => {
     e.preventDefault();
     messageFormButton.setAttribute('disabled','disabled');
     const messageText = messageInput.value;
-    clientSocket.emit('sendMessage', messageText, username, (error) => {
+    clientSocket.emit('sendMessage', messageText, username, room, (error) => {
 
         messageFormButton.removeAttribute('disabled');
         messageInput.value = '';
