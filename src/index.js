@@ -19,18 +19,20 @@ const publicDirPath = path.join(__dirname, '../public');
 // Let Express use a "Public Directory"
 exprApp.use(express.static(publicDirPath));
 
+// Rooms
+let chatRooms = [];
+
 // On Every Event:Connection log to Console
 io.on('connection', (socket) => {
     console.log('New Websocket Connection');
 
-
-
     socket.on('join', ({ username, room}) => {
        socket.join(room);
-
-       socket.emit('message', generateMessage(`Welcome`));
+       if(!chatRooms.includes(room)) {
+           chatRooms.push(room);
+       }
+       socket.emit('message', generateMessage(`Welcome`), chatRooms);
        socket.broadcast.to(room).emit('message', generateMessage(`A new User ${username} has Joined the Frey.`));
-
     });
 
     socket.on('sendMessage', (messageText, username, room, callback) => {
