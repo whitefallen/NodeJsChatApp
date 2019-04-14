@@ -5,12 +5,11 @@ const messageForm = document.querySelector('#messageForm');
 const messageFormButton = document.querySelector('#messageButton');
 const messageInput = document.querySelector('#messageInput');
 const messages = document.querySelector('#messages');
-const rooms = document.querySelector('#chat_rooms');
+const sidebar = document.querySelector('#sidebar');
 
 // Templates
-const messageTemplate = document.querySelector('#message-template').innerHTML
-// Templates
-const chatRoomTemplate = document.querySelector('#room-template').innerHTML
+const messageTemplate = document.querySelector('#message-template').innerHTML;
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
 
 // Options
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
@@ -24,10 +23,14 @@ clientSocket.on('message', (message, chatRoom) => {
    });
    messages.insertAdjacentHTML('beforeend', html);
 
-   const htmlRoom = Mustache.render(chatRoomTemplate, {
-       chatroom: chatRoom
-   });
-   rooms.insertAdjacentHTML('beforeend', htmlRoom);
+});
+
+clientSocket.on('roomData', ({room, users}) => {
+    const html = Mustache.render(sidebarTemplate, {
+        room: room,
+        users:users
+    });
+    sidebar.innerHTML = html;
 });
 
 messageForm.addEventListener("submit", (e) => {
@@ -47,4 +50,9 @@ messageForm.addEventListener("submit", (e) => {
     });
 });
 
-clientSocket.emit('join', { username, room});
+clientSocket.emit('join', { username, room}, (error) => {
+    if(error){
+        alert(error);
+        location.href = '/';
+    }
+});

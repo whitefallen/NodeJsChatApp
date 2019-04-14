@@ -5,7 +5,7 @@ const express = require('express');
 const socketio = require('socket.io');
 const Filter = require('bad-words');
 const { generateMessage } = require('./utils/messages');
-
+const { addUser, removeUser, getUser, getUsersInRoom} = require('./utils/users');
 const exprApp = express();
 // Create a Plain Server passing in ExpressApp to Use SocketIO later
 const httpServer = http.createServer(exprApp);
@@ -26,13 +26,25 @@ let chatRooms = [];
 io.on('connection', (socket) => {
     console.log('New Websocket Connection');
 
-    socket.on('join', ({ username, room}) => {
-       socket.join(room);
-       if(!chatRooms.includes(room)) {
-           chatRooms.push(room);
+    socket.on('join', ({ username, room}, callback) => {
+        const {error, user} = addUser({id: socket.id, username: username, room: room});
+        if(error) {
+            return callback(error);
+        }
+        socket.join(user.room);
+
+       if(!chatRooms.includes(user.room)) {
+           chatRooms.push(user.room);
        }
-       socket.emit('message', generateMessage(`Welcome`), chatRooms);
-       socket.broadcast.to(room).emit('message', generateMessage(`A new User ${username} has Joined the Frey.`));
+       socket.emit('message', generateMessage(`Welcome`, 'Discordify-System'), chatRooms);
+       socket.broadcast.to(user.room).emit('message', generateMessage(`A new User ${user.username} has Joined the Frey.`, 'Discordify-System'));
+
+       io.to(user.room).emit('roomData', {
+           room:user.room,
+           users: getUsersInRoom(user.room)
+       });
+
+       callback();
     });
 
     socket.on('sendMessage', (messageText, username, room, callback) => {
@@ -45,10 +57,16 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        io.emit('message', generateMessage(`A User have left.`));
+        const user = removeUser(socket.id);
+        if(user) {
+            io.emit('message', generateMessage(`${user.username} has left ${user.room}!`, 'Discordify-System'));
+            io.to(user.room).emit('roomData', {
+                room:user.room,
+                users: getUsersInRoom(user.room)
+            });
+        }
     });
 });
-
 
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
