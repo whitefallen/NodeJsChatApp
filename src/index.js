@@ -52,6 +52,9 @@ io.on('connection', (socket) => {
         if(filter.isProfane(messageText)) {
           return callback('Profanity is not allowed!');
         }
+        room = room.toLowerCase();
+        username = username.toLowerCase();
+
         io.to(room).emit('message', generateMessage(messageText, username));
         callback('');
     });

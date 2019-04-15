@@ -1,0 +1,5 @@
+const chatRooms = [];
+
+const addChatroom = ({}) => {
+
+}
